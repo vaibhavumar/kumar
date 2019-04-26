@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "928236328442",
+    "firebase_url": "https://kumar-ecommerse.firebaseio.com",
+    "project_id": "kumar-ecommerse",
+    "storage_bucket": "kumar-ecommerse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928236328442:android:6975f9c20dceefee",
+        "android_client_info": {
+          "package_name": "com.example.kumar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928236328442-bpqioa3jvn2b3jem1pi70focl3fpvci0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.kumar",
+            "certificate_hash": "e01f0a25032d3be77b9b8e8643245d3b4cb17225"
+          }
+        },
+        {
+          "client_id": "928236328442-udvigurckv376smv864nijjb41ntq9dd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-Js7l0hyungJX-CW0mU8MMM_9WFdActo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928236328442-udvigurckv376smv864nijjb41ntq9dd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
