@@ -1,7 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kumar/db/users.dart';
+
 import 'home.dart';
 
 class SignUp extends StatefulWidget {
@@ -245,8 +246,10 @@ class _SignUpState extends State<SignUp> {
                     "userId": user.uid,
                   })
                 })
-            .catchError((err) => {print(err.toString())});
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>HomePage()));
+            .then((_) {
+          Navigator.pushReplacement(
+              context, MaterialPageRoute(builder: (context) => HomePage()));
+        }).catchError((err) => {Fluttertoast.showToast(msg: err.toString())});
       }
     }
   }

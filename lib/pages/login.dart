@@ -1,13 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_auth_buttons/flutter_auth_buttons.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
+import '../db/users.dart';
+import 'auth.dart';
 import 'home.dart';
 import 'signup.dart';
-import 'auth.dart';
-import '../db/users.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -22,6 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   bool loading = false;
   bool isLoggedIn = false;
   FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  UserServices userServices = UserServices();
 
   @override
   void initState() {
@@ -228,37 +228,46 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void validateForm() {
-    if(_formKey.currentState.validate()){
-      firebaseAuth.signInWithEmailAndPassword(
-        email: _emailTextController.text,
-        password: _passwordTextController.text
-      ).catchError((error){
+    if (_formKey.currentState.validate()) {
+      firebaseAuth
+          .signInWithEmailAndPassword(
+              email: _emailTextController.text,
+              password: _passwordTextController.text)
+          .then((user) {
+        userServices.setUserData(user.uid);
+      }).catchError((error) {
         var errorCode = error.code;
         var errorMessage = error.message;
-        if(errorMessage=='There is no user record corresponding to this identifier. The user may have been deleted.'){
-          showDialog(context:context, builder: (context){
-            return AlertDialog(
-            title: Text('No User'),
-            content: Text('"${_emailTextController.text}" not found'),
-            actions: <Widget>[
-              FlatButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>SignUp()));
-                },
-                child: Row(children: <Widget>[
-                  Icon(Icons.person_add),
-                  Text('Sign up')
-                ],),
-              )
-            ],
-          );
-          });
-        } else if(errorCode=='auth/wrong-password'){
+        if (errorMessage ==
+            'There is no user record corresponding to this identifier. The user may have been deleted.') {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('No User'),
+                  content: Text('"${_emailTextController.text}" not found'),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => SignUp()));
+                      },
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.person_add),
+                          Text('Sign up')
+                        ],
+                      ),
+                    )
+                  ],
+                );
+              });
+        } else if (errorCode == 'auth/wrong-password') {
           Fluttertoast.showToast(msg: 'Wrong password');
         } else {
           Fluttertoast.showToast(msg: errorMessage);
         }
-      }).whenComplete((){
+      }).whenComplete(() {
         isSignedIn();
       });
     }

@@ -26,6 +26,7 @@ dependencies:
   firebase_database: 
   carousel_pro: ^0.0.13
   flutter_auth_buttons: ^0.3.1
+  flutter_typeahead: ^1.4.0
   flutter:
     sdk: flutter
 
