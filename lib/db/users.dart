@@ -12,6 +12,7 @@ class UserServices {
     _firestore.collection('users').document(id).setData(value).then((_) {
       prefs.setString('email', value['email']);
       prefs.setString('username', value['username']);
+      prefs.setString('userid', id);
     }).catchError((e) {
       print(e.toString());
     });

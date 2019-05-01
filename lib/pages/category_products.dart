@@ -125,14 +125,21 @@ class _CategoryBasedProductsState extends State<CategoryBasedProducts> {
                       )));
         },
         child: ListTile(
-          contentPadding: EdgeInsets.all(10.0),
+          contentPadding: EdgeInsets.all(20.0),
           //====Product Image=====
           leading: Stack(children: [
-            Text('$discount%'),
+            Container(
+              color: Colors.black26,
+              padding: EdgeInsets.all(2.0),
+              child: Text(
+                '$discount% Off',
+                style: TextStyle(color: Colors.deepOrange, fontSize: 16.0),
+              ),
+            ),
             Image.network(
               productImage,
-              width: 60.0,
-              height: 60.0,
+              width: 100.0,
+              height: 100.0,
             ),
           ]),
           //===Product Name====

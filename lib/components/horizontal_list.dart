@@ -44,7 +44,7 @@ class Categories extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
-        elevation: 1.8,
+        elevation: 10.8,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
             side: BorderSide(width: 1.5)),

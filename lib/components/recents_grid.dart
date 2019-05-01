@@ -33,53 +33,39 @@ class _FavoriteProductsState extends State<FavoriteProducts> {
     }
   }
 
-  var productList = [
-//    {
-//      "name": "Blended Tea",
-//      "picture": "images/banner/Georgia.jpg",
-//      "old price": 120.0,
-//      "price": 100.0,
-//    },
-//    {
-//      "name": "Tea",
-//      "picture": "images/banner/Georgia.jpg",
-//      "old price": 120.0,
-//      "price": 100.0,
-//    },
-//    {
-//      "name": "Double Blended Tea",
-//      "picture": "images/banner/Georgia.jpg",
-//      "old price": 120.0,
-//      "price": 100.0,
-//    },
-  ];
+  var productList = [];
+
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      physics: ScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: productList.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisSpacing: 8.0,
-        mainAxisSpacing: 8.0,
-        crossAxisCount: 2,
-      ),
-      itemBuilder: (BuildContext context, int index) {
-        double costPrice = double.parse(productList[index]['costPrice']);
-        double discount = double.parse(productList[index]['discount']);
-        var sellingPrice = costPrice - (costPrice * (discount / 100));
-        return SingleProduct(
-          productId: productList[index]['id'],
-          productName: productList[index]["name"],
-          productPicture: productList[index]["image"],
-          productOldPrice: costPrice,
-          productPrice: sellingPrice,
-          productDiscount: discount,
-          productQuantity: productList[index]['quantity'],
-          productCategory: productList[index]['category'],
-        );
-      },
-    );
+    return productList.length == 0
+        ? Center(
+            child: Text('No Favorites'),
+          )
+        : GridView.builder(
+            physics: ScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: productList.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisSpacing: 8.0,
+              mainAxisSpacing: 8.0,
+              crossAxisCount: 2,
+            ),
+            itemBuilder: (BuildContext context, int index) {
+              double costPrice = double.parse(productList[index]['costPrice']);
+              double discount = double.parse(productList[index]['discount']);
+              var sellingPrice = costPrice - (costPrice * (discount / 100));
+              return SingleProduct(
+                productId: productList[index]['id'],
+                productName: productList[index]["name"],
+                productPicture: productList[index]["image"],
+                productOldPrice: costPrice,
+                productPrice: sellingPrice,
+                productDiscount: discount,
+                productQuantity: productList[index]['quantity'],
+                productCategory: productList[index]['category'],
+              );
+            },
+          );
   }
 }
 
@@ -108,6 +94,7 @@ class SingleProduct extends StatelessWidget {
   Widget build(BuildContext context) {
     //=======Grid Products========
     return Card(
+      elevation: 5.0,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20.0),
           side: BorderSide(color: Colors.red, width: 2.0)),

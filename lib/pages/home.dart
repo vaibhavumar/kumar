@@ -13,6 +13,8 @@ import 'package:kumar/components/recents_grid.dart';
 import '../components/searchBar.dart';
 import 'product_details.dart';
 import '../db/bannerImages.dart';
+import 'favorites.dart';
+import 'myaccount.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -28,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   Icon _searchIcon = Icon(Icons.search, color: Colors.white);
   Widget _appBarTitle = Text('Kumar');
   List<NetworkImage> images = List<NetworkImage>();
+  String username;
 
   @override
   void initState() {
@@ -44,6 +47,7 @@ class _HomePageState extends State<HomePage> {
             accountName: FutureBuilder(
                 future: userServices.getUserData('username'),
                 builder: (context, userData) {
+                  username = userData.data;
                   return userData.hasData
                       ? Text('${userData.data}')
                       : Text('null');
@@ -82,7 +86,12 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (_) => MyAccount(username: username)));
+            },
             child: ListTile(
               title: Text('My Account'),
               leading: Icon(
@@ -115,7 +124,10 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => FavoritePage()));
+            },
             child: ListTile(
               title: Text('Favourites'),
               leading: Icon(
@@ -252,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                       MaterialPageRoute(builder: (context) => ShoppingCart()));
                 })
           ],
-          elevation: 0.0,
+          elevation: 10.0,
         ),
         drawer: createDrawer(),
         body: SingleChildScrollView(
@@ -281,7 +293,10 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(color: Colors.white, fontSize: 20.0),
                   ),
                 ),
-                FavoriteProducts()
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FavoriteProducts(),
+                )
               ]),
             ],
           ),
