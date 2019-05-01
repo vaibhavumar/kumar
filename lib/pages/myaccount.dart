@@ -25,6 +25,17 @@ class _MyAccountState extends State<MyAccount> {
           Card(
               color: Colors.white,
               elevation: 2.0,
+              child: InkWell(
+                onTap: () {
+                  //TODO: Change password
+                },
+                child: ListTile(
+                  title: Text('Change Password'),
+                ),
+              )),
+          Card(
+              color: Colors.white,
+              elevation: 2.0,
               child: ExpansionTile(
                 title: Text('Address'),
                 children: <Widget>[

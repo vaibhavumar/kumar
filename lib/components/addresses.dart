@@ -136,14 +136,15 @@ class _AddressesState extends State<Addresses> {
               children: <Widget>[
                 OutlineButton(
                   onPressed: () {
-                    var alert = MyDialog(
-                      userId: userId,
-                      name: name,
-                      address: address,
-                      isDefault: isDefault,
-                      ref: ref,
-                    );
-                    showDialog(context: this.context, child: alert);
+                    //TODO: Edit Address
+//                    var alert = MyModifyDialog(
+//                      userId: userId,
+//                      name: name,
+//                      address: address,
+//                      isDefault: isDefault,
+//                      ref: ref,
+//                    );
+//                    showDialog(context: this.context, child: alert);
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -164,16 +165,9 @@ class _AddressesState extends State<Addresses> {
 
 class MyDialog extends StatefulWidget {
   final userId;
-  final String name;
-  final String address;
-  final bool isDefault;
-  final ref;
-  MyDialog(
-      {this.userId,
-      this.name = '',
-      this.address = '',
-      this.isDefault = false,
-      this.ref});
+  MyDialog({
+    this.userId,
+  });
   @override
   _MyDialogState createState() => _MyDialogState();
 }
@@ -181,15 +175,13 @@ class MyDialog extends StatefulWidget {
 class _MyDialogState extends State<MyDialog> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
-  GlobalKey<FormState> _addKey = GlobalKey<FormState>();
-  bool isDefault;
+  GlobalKey<FormState> _addKey;
+  bool isDefault = false;
 
   @override
   void initState() {
     super.initState();
-    isDefault = widget.isDefault;
-    _nameController.text = widget.name;
-    _addressController.text = widget.address;
+    _addKey = GlobalKey<FormState>();
   }
 
   @override
@@ -249,7 +241,7 @@ class _MyDialogState extends State<MyDialog> {
       contentPadding: EdgeInsets.all(10.0),
       actions: <Widget>[
         FlatButton(
-          onPressed: _addAddress(widget.ref),
+          onPressed: _addAddress,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -286,41 +278,169 @@ class _MyDialogState extends State<MyDialog> {
     );
   }
 
-  _addAddress(DocumentReference ref) {
+  _addAddress() {
     if (_addKey.currentState.validate()) {
-      if (ref != null)
-        Firestore.instance
-            .collection('users')
-            .document(widget.userId)
-            .collection('address')
-            .document(ref.documentID)
-            .setData({
-          'reciever': _nameController.text,
-          'address': _addressController.text,
-          'isDefault': isDefault,
-        }).then((value) {
-          Fluttertoast.showToast(msg: 'Address Modified.');
-          _addKey.currentState.reset();
-          Navigator.pop(context);
-        }).catchError((err) {
-          Fluttertoast.showToast(msg: 'ERROR:' + err.toString());
-        });
-      else
-        Firestore.instance
-            .collection('users')
-            .document(widget.userId)
-            .collection('address')
-            .add({
-          'reciever': _nameController.text,
-          'address': _addressController.text,
-          'isDefault': isDefault,
-        }).then((value) {
-          Fluttertoast.showToast(msg: 'Address Added.');
-          _addKey.currentState.reset();
-          Navigator.pop(context);
-        }).catchError((err) {
-          Fluttertoast.showToast(msg: 'ERROR:' + err.toString());
-        });
+      Firestore.instance
+          .collection('users')
+          .document(widget.userId)
+          .collection('address')
+          .add({
+        'reciever': _nameController.text,
+        'address': _addressController.text,
+        'isDefault': isDefault,
+      }).then((value) {
+        Fluttertoast.showToast(msg: 'Address Added.');
+        _addKey.currentState.reset();
+        Navigator.pop(context);
+      }).catchError((err) {
+        Fluttertoast.showToast(msg: 'ERROR:' + err.toString());
+      });
     }
+  }
+}
+
+class MyModifyDialog extends StatefulWidget {
+  final userId;
+  final String name;
+  final String address;
+  final bool isDefault;
+  final ref;
+  MyModifyDialog(
+      {this.userId,
+      this.name = '',
+      this.address = '',
+      this.isDefault = false,
+      this.ref});
+  @override
+  _MyModifyDialogState createState() => _MyModifyDialogState();
+}
+
+class _MyModifyDialogState extends State<MyModifyDialog> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _addressController = TextEditingController();
+  GlobalKey<FormState> _addKey;
+  bool isDefault;
+
+  @override
+  void initState() {
+    super.initState();
+    isDefault = widget.isDefault;
+    _nameController.text = widget.name;
+    _addressController.text = widget.address;
+    _addKey = GlobalKey<FormState>();
+  }
+
+  @override
+  void dispose() {
+    _addKey.currentState.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Add address'),
+      titleTextStyle:
+          TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      backgroundColor: Colors.deepOrangeAccent,
+      content: Container(
+        padding: EdgeInsets.all(8.0),
+        color: Colors.white,
+        child: SingleChildScrollView(
+          child: Form(
+              key: _addKey,
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      hintText: 'Full Name',
+                    ),
+                    validator: (value) {
+                      if (value.isEmpty) return 'Name cannot be empty';
+                    },
+                  ),
+                  TextFormField(
+                    controller: _addressController,
+                    maxLines: 10,
+                    decoration: InputDecoration(hintText: 'Address'),
+                    validator: (value) {
+                      if (value.isEmpty) return 'Address cannot be empty';
+                    },
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Checkbox(
+                          value: isDefault,
+                          onChanged: (value) {
+                            setState(() {
+                              isDefault = value;
+                            });
+                          }),
+                      Text('Default Address')
+                    ],
+                  )
+                ],
+              )),
+        ),
+      ),
+      contentPadding: EdgeInsets.all(10.0),
+      actions: <Widget>[
+        FlatButton(
+          onPressed: _modifyAddress(widget.ref),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.add,
+                color: Colors.white,
+              ),
+              Text(
+                'Add',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        ),
+        FlatButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.close,
+                color: Colors.white,
+              ),
+              Text(
+                'Close',
+                style: TextStyle(color: Colors.white),
+              ),
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  _modifyAddress(DocumentReference ref) {
+    if (_addKey.currentState.validate())
+      Firestore.instance
+          .collection('users')
+          .document(widget.userId)
+          .collection('address')
+          .document(ref.documentID)
+          .setData({
+        'reciever': _nameController.text,
+        'address': _addressController.text,
+        'isDefault': isDefault,
+      }).then((value) {
+        Fluttertoast.showToast(msg: 'Address Modified.');
+        _addKey.currentState.reset();
+        Navigator.pop(context);
+      }).catchError((err) {
+        Fluttertoast.showToast(msg: 'ERROR:' + err.toString());
+      });
   }
 }

@@ -91,7 +91,7 @@ class _CartProductsState extends State<CartProducts> {
   }
 
   void updateTotal(double sellingPrice) async {
-    setState(() async {
+    setState(() {
       widget.totalCost += sellingPrice;
     });
   }
@@ -119,7 +119,7 @@ class _CartProductsState extends State<CartProducts> {
               double.parse(productsOnTheCart[index]['costPrice']);
           double discount = double.parse(productsOnTheCart[index]['discount']);
           var sellingPrice = costPrice - (costPrice * (discount / 100));
-          updateTotal(sellingPrice);
+          //updateTotal(sellingPrice);
           return SingleCartProduct(
             cartProductName: productsOnTheCart[index]['name'],
             cartProductPicture: productsOnTheCart[index]["image"],
