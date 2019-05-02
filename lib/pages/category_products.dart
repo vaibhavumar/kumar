@@ -44,9 +44,11 @@ class _CategoryBasedProductsState extends State<CategoryBasedProducts> {
           onSuggestionSelected: (suggestion) {
             this._searchIcon = Icon(Icons.search);
             this._appBarTitle = Text('${widget.categoryName}');
-            var productPrice = double.parse(suggestion['costPrice']) -
-                (double.parse(suggestion['costPrice']) *
-                    (double.parse(suggestion['discount']) / 100));
+            var productPrice =
+                double.parse(suggestion['costPrice'].toString()) -
+                    (double.parse(suggestion['costPrice'].toString()) *
+                        (double.parse(suggestion['discount'].toString()) /
+                            100));
             Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -55,8 +57,10 @@ class _CategoryBasedProductsState extends State<CategoryBasedProducts> {
                           productDetailName: suggestion['name'],
                           productDetailCategory: suggestion['category'],
                           productDetailPrice: productPrice.toString(),
-                          productDetailQuantity: suggestion['quantity'],
-                          productDetailOldPrice: suggestion['costPrice'],
+                          productDetailQuantity:
+                              suggestion['quantity'].toString(),
+                          productDetailOldPrice:
+                              suggestion['costPrice'].toString(),
                           productDetailPicture: suggestion['image'],
                         )));
           },
@@ -102,8 +106,8 @@ class _CategoryBasedProductsState extends State<CategoryBasedProducts> {
   }
 
   _buildProducts(BuildContext context, DocumentSnapshot document) {
-    final double costPrice = double.parse(document['costPrice']);
-    final double discount = double.parse(document['discount']);
+    final double costPrice = double.parse(document['costPrice'].toString());
+    final double discount = double.parse(document['discount'].toString());
     final double sellingPrice = costPrice - (costPrice * (discount / 100));
     final productName = document['name'];
     final productImage = document['image'];
@@ -128,19 +132,24 @@ class _CategoryBasedProductsState extends State<CategoryBasedProducts> {
           contentPadding: EdgeInsets.all(20.0),
           //====Product Image=====
           leading: Stack(children: [
-            Container(
-              color: Colors.black26,
-              padding: EdgeInsets.all(2.0),
-              child: Text(
-                '$discount% Off',
-                style: TextStyle(color: Colors.deepOrange, fontSize: 16.0),
-              ),
-            ),
             Image.network(
               productImage,
-              width: 100.0,
-              height: 100.0,
+              width: 80.0,
+              height: 80.0,
             ),
+            discount == 0.0
+                ? SizedBox(
+                    width: 0.1,
+                  )
+                : Container(
+                    color: Colors.black87,
+                    padding: EdgeInsets.all(2.0),
+                    child: Text(
+                      '$discount% Off',
+                      style:
+                          TextStyle(color: Colors.deepOrange, fontSize: 16.0),
+                    ),
+                  ),
           ]),
           //===Product Name====
           title: Text('$productName'),
@@ -187,7 +196,7 @@ class _CategoryBasedProductsState extends State<CategoryBasedProducts> {
                       color: Colors.red),
                 ),
                 Text(
-                  '₹$sellingPrice',
+                  '₹${sellingPrice.round()}',
                   style:
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 )

@@ -51,8 +51,10 @@ class _FavoriteProductsState extends State<FavoriteProducts> {
               crossAxisCount: 2,
             ),
             itemBuilder: (BuildContext context, int index) {
-              double costPrice = double.parse(productList[index]['costPrice']);
-              double discount = double.parse(productList[index]['discount']);
+              double costPrice =
+                  double.parse(productList[index]['costPrice'].toString());
+              double discount =
+                  double.parse(productList[index]['discount'].toString());
               var sellingPrice = costPrice - (costPrice * (discount / 100));
               return SingleProduct(
                 productId: productList[index]['id'],

@@ -116,8 +116,9 @@ class _CartProductsState extends State<CartProducts> {
         itemCount: productsOnTheCart.length,
         itemBuilder: (context, index) {
           double costPrice =
-              double.parse(productsOnTheCart[index]['costPrice']);
-          double discount = double.parse(productsOnTheCart[index]['discount']);
+              double.parse(productsOnTheCart[index]['costPrice'].toString());
+          double discount =
+              double.parse(productsOnTheCart[index]['discount'].toString());
           var sellingPrice = costPrice - (costPrice * (discount / 100));
           //updateTotal(sellingPrice);
           return SingleCartProduct(
