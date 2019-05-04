@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -49,6 +48,18 @@ class CartDetails {
       }).catchError((err) {
         Fluttertoast.showToast(msg: err.toString());
       });
+    });
+  }
+
+  void clearCart() async {
+    String userId = (await FirebaseAuth.instance.currentUser()).uid;
+    _firestore
+        .collection('users')
+        .document(userId)
+        .updateData({'cart': FieldValue.delete()}).then((_) {
+      Fluttertoast.showToast(msg: 'Cart Cleared.');
+    }).catchError((err) {
+      Fluttertoast.showToast(msg: err.toString());
     });
   }
 }

@@ -21,7 +21,11 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  AnimationController _controller;
+  Animation animationHorizontal;
+  Animation animationVertical;
+
   SharedPreferences sharedPreferences;
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   UserServices userServices = UserServices();
@@ -36,6 +40,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     getBannerImages();
+    _controller = AnimationController(
+        duration: Duration(milliseconds: 2500), vsync: this);
+    animationHorizontal = Tween(begin: 1.0, end: 0.0).animate(
+        CurvedAnimation(parent: _controller, curve: Curves.bounceInOut));
+    animationVertical = Tween(begin: 1.0, end: 0.0)
+        .animate(CurvedAnimation(parent: _controller, curve: Curves.bounceIn));
   }
 
   createDrawer() {
@@ -231,6 +241,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _controller.forward();
+    var w = MediaQuery.of(context).size.width;
+    var h = MediaQuery.of(context).size.height;
     //=============Carousel================
     Widget imageCarousel = Container(
       height: 300.0,
@@ -282,7 +295,15 @@ class _HomePageState extends State<HomePage> {
                 SizedBox(
                   height: 150.0,
                 ),
-                HorizontalListCategories(),
+                AnimatedBuilder(
+                  animation: _controller,
+                  builder: (context, child) {
+                    return Transform(
+                        transform: Matrix4.translationValues(
+                            animationHorizontal.value * w, 0.0, 0.0),
+                        child: HorizontalListCategories());
+                  },
+                ),
                 Divider(
                   color: Colors.white,
                 ),
@@ -295,7 +316,16 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: FavoriteProducts(),
+                  child: AnimatedBuilder(
+                    animation: _controller,
+                    builder: (context, child) {
+                      return Transform(
+                        transform: Matrix4.translationValues(
+                            0.0, animationVertical.value * h, 0.0),
+                        child: FavoriteProducts(),
+                      );
+                    },
+                  ),
                 )
               ]),
             ],

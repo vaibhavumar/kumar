@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kumar/pages/orderPlaced.dart';
 import '../components/addresses.dart';
 
 class CheckOut extends StatefulWidget {
@@ -11,14 +12,15 @@ class CheckOut extends StatefulWidget {
 class _CheckOutState extends State<CheckOut> {
   bool isPlaceDisabled = false;
   String userId;
-  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-  Firestore firestore = Firestore.instance;
+  FirebaseAuth fireBaseAuth = FirebaseAuth.instance;
+  Firestore _fireStore = Firestore.instance;
   int _radioGroup = 0;
+  var _documentSnapshot;
 
   @override
   void initState() {
     super.initState();
-    firebaseAuth.currentUser().then((user) {
+    fireBaseAuth.currentUser().then((user) {
       setState(() {
         userId = user.uid;
       });
@@ -41,7 +43,7 @@ class _CheckOutState extends State<CheckOut> {
         elevation: 0.0,
       ),
       body: StreamBuilder(
-          stream: firestore
+          stream: _fireStore
               .collection('users')
               .document(userId)
               .collection('address')
@@ -70,6 +72,7 @@ class _CheckOutState extends State<CheckOut> {
                 ),
               );
             } else {
+              _documentSnapshot = snapshots.data.documents;
               return ListView.builder(
                   itemCount: snapshots.data.documents.length,
                   itemBuilder: (context, index) {
@@ -95,7 +98,19 @@ class _CheckOutState extends State<CheckOut> {
                 color: Colors.deepOrange,
                 elevation: 10.0,
                 padding: EdgeInsets.fromLTRB(30.0, 15.0, 30.0, 15.0),
-                onPressed: isPlaceDisabled ? null : () {},
+                onPressed: isPlaceDisabled
+                    ? null
+                    : () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => OrderPage(
+                                      name: _documentSnapshot[_radioGroup]
+                                          ['reciever'],
+                                      address: _documentSnapshot[_radioGroup]
+                                          ['address'],
+                                    )));
+                      },
                 child: Text('Place Order'),
               ),
             ),
