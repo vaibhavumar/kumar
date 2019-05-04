@@ -91,6 +91,7 @@ class _OrderPageState extends State<OrderPage> {
   }
 
   _handleOrder(String name, String address) {
+    print('placing order');
     DateTime datetime = DateTime.now();
     String dateId =
         'KUMAR/${datetime.day}${datetime.month}${datetime.year}/${datetime.hour}${datetime.minute}${datetime.second}';

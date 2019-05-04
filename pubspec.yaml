@@ -27,7 +27,6 @@ dependencies:
   carousel_pro: ^0.0.13
   flutter_auth_buttons: ^0.3.1
   flutter_typeahead: ^1.4.0
-  uuid: ^2.0.1
   flutter:
     sdk: flutter
 
