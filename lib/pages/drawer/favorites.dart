@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/recents_grid.dart';
+import 'package:kumar/components/recents_grid.dart';
 
 class FavoritePage extends StatefulWidget {
   @override

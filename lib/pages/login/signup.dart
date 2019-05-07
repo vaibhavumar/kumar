@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:kumar/db/users.dart';
 
-import 'home.dart';
+import '../drawer/home.dart';
 
 class SignUp extends StatefulWidget {
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../components/addresses.dart';
+import 'package:kumar/components/addresses.dart';
 
 class MyAccount extends StatefulWidget {
   final username;

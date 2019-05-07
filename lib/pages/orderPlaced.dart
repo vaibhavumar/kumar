@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:kumar/db/cartDetails.dart';
 import 'package:kumar/db/orderDetails.dart';
-import 'package:kumar/pages/home.dart';
+import 'package:kumar/pages/drawer/home.dart';
 
 class OrderPage extends StatefulWidget {
   final name;
@@ -69,8 +69,10 @@ class _OrderPageState extends State<OrderPage> {
             Expanded(
               child: SizedBox(),
             ),
-            GestureDetector(
-              onTap: _handleOrder(widget.name, widget.address),
+            InkWell(
+              onTap: () {
+                _handleOrder(widget.name, widget.address);
+              },
               child: Container(
                 width: 300.0,
                 decoration: BoxDecoration(
@@ -99,9 +101,10 @@ class _OrderPageState extends State<OrderPage> {
       'orderId': dateId,
       'name': name,
       'address': address,
-      'orders': FieldValue.arrayUnion(cartItems)
-    }).then((value) {
-      orderDetails.addOrder(dateId);
+      'orders': FieldValue.arrayUnion(cartItems),
+      'status': 'Pending',
+    }).then((orderRef) {
+      orderDetails.addOrder(orderRef);
       cartDetails.clearCart();
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (_) => HomePage()));

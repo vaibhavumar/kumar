@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import '../pages/category_products.dart';
 
 class HorizontalListCategories extends StatefulWidget {
@@ -58,17 +58,25 @@ class Categories extends StatelessWidget {
                         CategoryBasedProducts(categoryName: imageCaption)));
           },
           child: Container(
-            width: 200.0,
-            child: ListTile(
-              title: Image.network(
-                imageLocation,
-                height: 120.0,
-                width: double.infinity,
-              ),
-              subtitle: Container(
-                  alignment: Alignment.topCenter, child: Text(imageCaption)),
-            ),
-          ),
+              width: 200.0,
+              child: ListTile(
+                  title: CachedNetworkImage(
+                    imageUrl: imageLocation,
+                    fit: BoxFit.contain,
+                    fadeInCurve: Curves.easeIn,
+                    height: 140.0,
+                    width: double.infinity,
+                    placeholder: (context, url) => Center(
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.deepOrange),
+                          ),
+                        ),
+                  ),
+                  subtitle: Text(
+                    imageCaption,
+                    textAlign: TextAlign.center,
+                  ))),
         ),
       ),
     );

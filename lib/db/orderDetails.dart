@@ -5,33 +5,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 class OrderDetails {
   Firestore _fireStore = Firestore.instance;
 
-  Future<List<dynamic>> getOrders() async {
+  Future<Stream<DocumentSnapshot>> getOrders() async {
     List<dynamic> orders;
-
     String userId = (await FirebaseAuth.instance.currentUser()).uid;
-    QuerySnapshot querySnaps = await _fireStore
-        .collection('users')
-        .where('userId', isEqualTo: userId)
-        .getDocuments();
-    orders = querySnaps.documents.first.data['orders'];
-    return orders ?? [];
+    return _fireStore.collection('users').document(userId).snapshots();
   }
 
-  void cancelOrder(String orderId) async {
-    String userId = (await FirebaseAuth.instance.currentUser()).uid;
-    _fireStore.collection('users').document(userId).updateData({
-      'orders': FieldValue.arrayRemove([orderId])
-    }).then((_) {
-      Fluttertoast.showToast(msg: 'Order Cancelled');
-    }).catchError((err) {
-      Fluttertoast.showToast(msg: err.toString());
-    });
-  }
-
-  void addOrder(String orderId) async {
+  void addOrder(DocumentReference orderRef) async {
     await FirebaseAuth.instance.currentUser().then((user) {
       _fireStore.collection('users').document(user.uid).updateData({
-        'orders': FieldValue.arrayUnion([orderId])
+        'orders': FieldValue.arrayUnion([orderRef])
       }).then((_) {
         Fluttertoast.showToast(msg: 'Order Placed');
       }).catchError((err) {

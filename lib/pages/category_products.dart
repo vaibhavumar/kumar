@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'product_details.dart';
-import '../components/searchBar.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CategoryBasedProducts extends StatefulWidget {
   final categoryName;
@@ -13,78 +11,20 @@ class CategoryBasedProducts extends StatefulWidget {
 
 class _CategoryBasedProductsState extends State<CategoryBasedProducts> {
   Firestore _firestore = Firestore.instance;
-  Icon _searchIcon = Icon(Icons.search, color: Colors.white);
-  SearchServices _searchServices = SearchServices();
-  Widget _appBarTitle;
-
-  searchProducts() {
-    setState(() {
-      if (this._searchIcon.icon == Icons.search) {
-        this._searchIcon = new Icon(Icons.close);
-        this._appBarTitle = TypeAheadField(
-          textFieldConfiguration: TextFieldConfiguration(
-              keyboardType: TextInputType.text,
-              cursorColor: Colors.white70,
-              autofocus: false,
-              decoration: InputDecoration(hintText: 'Search')),
-          suggestionsCallback: (pattern) async {
-            return await _searchServices.getSuggestionByCategory(
-                pattern, widget.categoryName);
-          },
-          itemBuilder: (context, suggestion) {
-            return ListTile(
-              leading: Image.network(
-                suggestion['image'],
-                height: 60.0,
-                width: 60.0,
-              ),
-              title: Text('${suggestion['name']}(${suggestion['quantity']})'),
-            );
-          },
-          onSuggestionSelected: (suggestion) {
-            this._searchIcon = Icon(Icons.search);
-            this._appBarTitle = Text('${widget.categoryName}');
-            var productPrice =
-                double.parse(suggestion['costPrice'].toString()) -
-                    (double.parse(suggestion['costPrice'].toString()) *
-                        (double.parse(suggestion['discount'].toString()) /
-                            100));
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (_) => ProductDetails(
-                          productDetailId: suggestion['id'],
-                          productDetailName: suggestion['name'],
-                          productDetailCategory: suggestion['category'],
-                          productDetailPrice: productPrice.toString(),
-                          productDetailQuantity:
-                              suggestion['quantity'].toString(),
-                          productDetailOldPrice:
-                              suggestion['costPrice'].toString(),
-                          productDetailPicture: suggestion['image'],
-                        )));
-          },
-        );
-      } else {
-        this._searchIcon = Icon(Icons.search);
-        this._appBarTitle = Text('${widget.categoryName}');
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.deepOrange,
-        title: _appBarTitle ?? Text('${widget.categoryName}'),
+        title: Text('${widget.categoryName}'),
         actions: <Widget>[
           IconButton(
               icon: Icon(
                 Icons.search,
                 color: Colors.white,
               ),
-              onPressed: searchProducts),
+              onPressed: () {}),
         ],
         elevation: 0.3,
       ),

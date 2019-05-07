@@ -17,16 +17,16 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
-  rxdart:
+  rxdart: ^0.21.0
   fluttertoast: ^3.0.3
   shared_preferences: ^0.5.1+2
-  google_sign_in: 
-  cloud_firestore: 
-  firebase_auth: 
-  firebase_database: 
+  google_sign_in: ^3.3.0+1
+  cloud_firestore: ^0.8.2+3
+  firebase_auth: ^0.6.6
+  firebase_database: ^1.1.0+1
   carousel_pro: ^0.0.13
   flutter_auth_buttons: ^0.3.1
-  flutter_typeahead: ^1.4.0
+  cached_network_image: ^0.8.0
   flutter:
     sdk: flutter
 

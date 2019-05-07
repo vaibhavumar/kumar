@@ -1,16 +1,15 @@
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class FavoriteDetails {
-  Firestore _firestore = Firestore.instance;
+  Firestore _fireStore = Firestore.instance;
 
   Future<List<dynamic>> getFavorites() async {
     List<dynamic> favorites;
 
     String userId = (await FirebaseAuth.instance.currentUser()).uid;
-    QuerySnapshot querySnaps = await _firestore
+    QuerySnapshot querySnaps = await _fireStore
         .collection('users')
         .where('userId', isEqualTo: userId)
         .getDocuments();
@@ -31,7 +30,7 @@ class FavoriteDetails {
 
   void removeProductFromFavorites(String productId) async {
     String userId = (await FirebaseAuth.instance.currentUser()).uid;
-    _firestore.collection('users').document(userId).updateData({
+    _fireStore.collection('users').document(userId).updateData({
       'favorite': FieldValue.arrayRemove([productId])
     }).catchError((err) {
       Fluttertoast.showToast(msg: err.toString());
@@ -40,7 +39,7 @@ class FavoriteDetails {
 
   void addProductToFavorites(String productId) async {
     await FirebaseAuth.instance.currentUser().then((user) {
-      _firestore.collection('users').document(user.uid).updateData({
+      _fireStore.collection('users').document(user.uid).updateData({
         'favorite': FieldValue.arrayUnion([productId])
       }).catchError((err) {
         Fluttertoast.showToast(msg: err.toString());

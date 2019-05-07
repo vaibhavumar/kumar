@@ -79,7 +79,7 @@ class _AddressesState extends State<Addresses> {
                   var alert = MyDialog(
                     userId: userId,
                   );
-                  showDialog(context: this.context, child: alert).then((_) {
+                  showDialog(context: this.context, builder: (_) => alert).then((_) {
                     setState(() {});
                   });
                 },
@@ -109,7 +109,6 @@ class _AddressesState extends State<Addresses> {
     String name = document[index]['reciever'];
     String address = document[index]['address'];
     bool isDefault = document[index]['isDefault'];
-    DocumentReference ref = document[index].reference;
     return Card(
       elevation: 2.0,
       child: ExpansionTile(
