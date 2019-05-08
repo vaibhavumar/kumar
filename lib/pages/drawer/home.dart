@@ -1,5 +1,6 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
+import 'package:kumar/components/searchProduct.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 //=====My Packages=======
@@ -71,7 +72,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           backgroundColor: Colors.deepOrange,
           title: Text("Kumar"),
           actions: <Widget>[
-            IconButton(icon: Icon(Icons.search), onPressed: () {}),
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () {
+                  showSearch(
+                      context: context, delegate: CustomSearchDelegate(null));
+                }),
             IconButton(
                 icon: Icon(
                   Icons.shopping_cart,

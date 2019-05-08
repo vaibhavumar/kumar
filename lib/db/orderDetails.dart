@@ -6,7 +6,6 @@ class OrderDetails {
   Firestore _fireStore = Firestore.instance;
 
   Future<Stream<DocumentSnapshot>> getOrders() async {
-    List<dynamic> orders;
     String userId = (await FirebaseAuth.instance.currentUser()).uid;
     return _fireStore.collection('users').document(userId).snapshots();
   }
