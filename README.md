@@ -16,5 +16,5 @@ For help getting started with Flutter, view our
 samples, guidance on mobile development, and a full API reference.
 
 
-##Security precautions
+## Security precautions
 Removed google-services.json from project. It can be downloaded from your firebase account.
